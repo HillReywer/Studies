@@ -1,283 +1,361 @@
-# Полный технический список параметров для отслеживания усталости
+# Full Technical List of Fatigue Tracking Parameters
 
-## ПРИОРИТЕТ 1: Критически важные параметры (Обязательные)
+## PRIORITY 1: Critical Parameters (Mandatory)
 
-### 1. Heart Rate Variability (HRV) - Вариабельность сердечного ритма
+### 1. Heart Rate Variability (HRV)
 
 #### 1.1 RMSSD (Root Mean Square of Successive Differences)
-**Формула:**
+
+**Formula:**
+
 ```
 RMSSD = √[(1/(N-1)) × Σ(i=1 to N-1)(RRᵢ₊₁ - RRᵢ)²]
 ```
-- **Единицы:** миллисекунды (мс)
-- **Нормальный диапазон:** 20-100 мс (зависит от возраста)
-- **Частота измерения:** Каждые 5 минут в покое
-- **Интерпретация:** ↓ RMSSD = ↑ усталость/стресс
-- **Минимальные требования:** 250 точек R-R интервалов
+
+* **Units:** milliseconds (ms)
+* **Normal range:** 20–100 ms (depends on age)
+* **Measurement frequency:** Every 5 minutes at rest
+* **Interpretation:** ↓ RMSSD = ↑ fatigue/stress
+* **Minimum requirement:** 250 R-R interval points
 
 #### 1.2 SDNN (Standard Deviation of NN intervals)
-**Формула:**
+
+**Formula:**
+
 ```
 SDNN = √[(1/(N-1)) × Σ(i=1 to N)(RRᵢ - RR̄)²]
 ```
-- **Единицы:** миллисекунды (мс)
-- **Нормальный диапазон:** 50-150 мс
-- **Окно измерения:** 5 минут (краткосрочное) или 24 часа (долгосрочное)
-- **Интерпретация:** ↓ SDNN = ↓ общая вариабельность = ↑ усталость
+
+* **Units:** milliseconds (ms)
+* **Normal range:** 50–150 ms
+* **Measurement window:** 5 minutes (short-term) or 24 hours (long-term)
+* **Interpretation:** ↓ SDNN = ↓ overall variability = ↑ fatigue
 
 #### 1.3 pNN50 (Percentage of successive RR intervals differing by >50ms)
-**Формула:**
-```
-pNN50 = (количество |RRᵢ₊₁ - RRᵢ| > 50мс / общее количество интервалов) × 100%
-```
-- **Единицы:** проценты (%)
-- **Нормальный диапазон:** 5-40%
-- **Интерпретация:** ↓ pNN50 = ↓ парасимпатическая активность
 
-### 2. Heart Rate (HR) - Частота сердечных сокращений
+**Formula:**
+
+```
+pNN50 = (count |RRᵢ₊₁ - RRᵢ| > 50ms / total intervals) × 100%
+```
+
+* **Units:** percent (%)
+* **Normal range:** 5–40%
+* **Interpretation:** ↓ pNN50 = ↓ parasympathetic activity
+
+### 2. Heart Rate (HR)
 
 #### 2.1 Resting Heart Rate (RHR)
-**Формула:**
+
+**Formula:**
+
 ```
-RHR = 60 / mean(RR интервалы в покое)
+RHR = 60 / mean(RR intervals at rest)
 ```
-- **Единицы:** уд/мин (bpm)
-- **Нормальный диапазон:** 50-80 уд/мин
-- **Время измерения:** Утром после пробуждения, лежа
-- **Интерпретация:** ↑ RHR на 5-10 уд/мин = возможная усталость
+
+* **Units:** bpm (beats per minute)
+* **Normal range:** 50–80 bpm
+* **Measurement time:** Morning after waking up, lying down
+* **Interpretation:** ↑ RHR by 5–10 bpm = possible fatigue
 
 #### 2.2 Heart Rate Recovery (HRR)
-**Формула:**
+
+**Formula:**
+
 ```
 HRR₁ = HR_peak - HR_1min_after
 HRR₂ = HR_peak - HR_2min_after
 
-Экспоненциальная модель:
+Exponential model:
 HR(t) = HR_rest + (HR_peak - HR_rest) × e^(-t/τ)
 ```
-- **Единицы:** уд/мин
-- **Нормальные значения:** HRR₁ > 12 уд/мин, HRR₂ > 22 уд/мин
-- **Интерпретация:** ↓ HRR = ↓ восстановление = ↑ усталость
 
-### 3. Sleep Metrics - Параметры сна
+* **Units:** bpm
+* **Normal values:** HRR₁ > 12 bpm, HRR₂ > 22 bpm
+* **Interpretation:** ↓ HRR = ↓ recovery = ↑ fatigue
+
+### 3. Sleep Metrics
 
 #### 3.1 Sleep Efficiency
-**Формула:**
+
+**Formula:**
+
 ```
 Sleep_Efficiency = (Total_Sleep_Time / Time_In_Bed) × 100%
 ```
-- **Единицы:** проценты (%)
-- **Целевой диапазон:** > 85%
-- **Расчет:** На основе акселерометра + HR
+
+* **Units:** percent (%)
+* **Target range:** > 85%
+* **Calculation:** Based on accelerometer + HR
 
 #### 3.2 Sleep Debt
-**Формула:**
+
+**Formula:**
+
 ```
 Sleep_Debt = Σ(i=1 to 14)(Recommended_Sleep - Actual_Sleep)ᵢ / 14
 ```
-- **Единицы:** часы
-- **Критический порог:** > 2 часа
-- **Окно расчета:** Последние 14 дней
+
+* **Units:** hours
+* **Critical threshold:** > 2 hours
+* **Calculation window:** Last 14 days
 
 #### 3.3 Sleep Stages Distribution
-**Детекция через HRV + движение:**
+
+**Detected via HRV + movement:**
+
 ```
 Deep_Sleep_% = (Deep_Sleep_Time / Total_Sleep_Time) × 100%
 REM_Sleep_% = (REM_Sleep_Time / Total_Sleep_Time) × 100%
 Light_Sleep_% = (Light_Sleep_Time / Total_Sleep_Time) × 100%
 ```
-- **Целевые значения:** Deep: 15-20%, REM: 20-25%, Light: 50-60%
 
-### 4. Activity Load - Физическая нагрузка
+* **Target values:** Deep: 15–20%, REM: 20–25%, Light: 50–60%
+
+### 4. Activity Load
 
 #### 4.1 Training Load (TRIMP - Training Impulse)
-**Формула:**
+
+**Formula:**
+
 ```
 TRIMP = Duration × HR_avg × 0.64 × e^(1.92 × HR_ratio)
-где HR_ratio = (HR_avg - HR_rest) / (HR_max - HR_rest)
+where HR_ratio = (HR_avg - HR_rest) / (HR_max - HR_rest)
 ```
-- **Единицы:** условные единицы
-- **Интерпретация:** Накопленная нагрузка за тренировку
 
-#### 4.2 Acute:Chronic Workload Ratio (ACWR)
-**Формула:**
+* **Units:** arbitrary units
+* **Interpretation:** Accumulated load from training
+
+#### 4.2 Acute\:Chronic Workload Ratio (ACWR)
+
+**Formula:**
+
 ```
-ACWR = Acute_Load (7 дней) / Chronic_Load (28 дней)
+ACWR = Acute_Load (7 days) / Chronic_Load (28 days)
 ```
-- **Оптимальный диапазон:** 0.8-1.3
-- **Риск травмы:** > 1.5
-- **Недотренированность:** < 0.8
 
-### 5. Respiratory Rate - Частота дыхания
+* **Optimal range:** 0.8–1.3
+* **Injury risk:** > 1.5
+* **Undertraining:** < 0.8
 
-**Формула извлечения из PPG:**
+### 5. Respiratory Rate
+
+**Extracted from PPG formula:**
+
 ```
 RR = FFT_peak_frequency(respiratory_component) × 60
-где respiratory_component = bandpass_filter(PPG_signal, 0.1-0.5 Hz)
+where respiratory_component = bandpass_filter(PPG_signal, 0.1–0.5 Hz)
 ```
-- **Единицы:** вдохов/мин
-- **Норма в покое:** 12-20 вдохов/мин
-- **Повышение:** +3-5 вдохов/мин может указывать на усталость
 
-## ПРИОРИТЕТ 2: Важные дополнительные параметры
+* **Units:** breaths/min
+* **Resting norm:** 12–20 breaths/min
+* **Elevation:** +3–5 may indicate fatigue
 
-### 6. HRV Frequency Domain - Частотный анализ
+## PRIORITY 2: Important Additional Parameters
+
+### 6. HRV Frequency Domain
 
 #### 6.1 LF/HF Ratio
-**Формула:**
+
+**Formula:**
+
 ```
-LF_power = ∫(0.04-0.15 Hz) PSD(f) df
-HF_power = ∫(0.15-0.4 Hz) PSD(f) df
+LF_power = ∫(0.04–0.15 Hz) PSD(f) df
+HF_power = ∫(0.15–0.4 Hz) PSD(f) df
 LF/HF_ratio = LF_power / HF_power
 ```
-- **Нормальный диапазон:** 0.5-2.0
-- **Интерпретация:** ↑ LF/HF = ↑ симпатическая активность = стресс/усталость
+
+* **Normal range:** 0.5–2.0
+* **Interpretation:** ↑ LF/HF = ↑ sympathetic activity = stress/fatigue
 
 #### 6.2 Total Power
-**Формула:**
-```
-TP = ∫(0.003-0.4 Hz) PSD(f) df
-```
-- **Единицы:** мс²
-- **Интерпретация:** ↓ TP = ↓ общая адаптивность
 
-### 7. Movement Analysis - Анализ движения
+**Formula:**
+
+```
+TP = ∫(0.003–0.4 Hz) PSD(f) df
+```
+
+* **Units:** ms²
+* **Interpretation:** ↓ TP = ↓ overall adaptability
+
+### 7. Movement Analysis
 
 #### 7.1 Activity Counts
-**Формула:**
+
+**Formula:**
+
 ```
 Activity_Count = Σ|acceleration_magnitude - 1g| × sampling_rate
 ```
-- **Единицы:** counts/min
-- **Использование:** Классификация уровня активности
+
+* **Units:** counts/min
+* **Use:** Classifying activity levels
 
 #### 7.2 Step Cadence Variability
-**Формула:**
+
+**Formula:**
+
 ```
 CV_cadence = (SD_cadence / mean_cadence) × 100%
 ```
-- **Интерпретация:** ↑ вариабельность = ↑ усталость при ходьбе
+
+* **Interpretation:** ↑ variability = ↑ fatigue during walking
 
 ### 8. Circadian Rhythm Parameters
 
-#### 8.1 Mesor (средний уровень)
-**Формула:**
+#### 8.1 Mesor (mean level)
+
+**Formula:**
+
 ```
 HR_circadian(t) = Mesor + Amplitude × cos(2π(t - Acrophase)/24)
 ```
-- **Параметры:** Извлекаются через косинор-анализ
-- **Интерпретация:** Сдвиг акрофазы = нарушение циркадных ритмов
 
-### 9. Composite Scores - Комплексные показатели
+* **Parameters:** Extracted via cosinor analysis
+* **Interpretation:** Acrophase shift = circadian rhythm disruption
+
+### 9. Composite Scores
 
 #### 9.1 Body Battery (Garmin-style)
-**Формула:**
+
+**Formula:**
+
 ```
 Battery(t) = Battery(t-1) + Recovery_rate - Drain_rate
 
-где:
+where:
 Recovery_rate = f(HRV, sleep_quality, rest_time)
 Drain_rate = g(stress_level, activity_intensity)
 ```
-- **Диапазон:** 0-100
-- **Скорость восстановления:** ~4-8 единиц/час в покое
+
+* **Range:** 0–100
+* **Recovery rate:** \~4–8 units/hour at rest
 
 #### 9.2 Readiness Score (Oura-style)
-**Формула:**
+
+**Formula:**
+
 ```
 Readiness = w₁×HRV_score + w₂×Sleep_score + w₃×Activity_balance + w₄×Temperature_score
 
-где веса: w₁=0.35, w₂=0.35, w₃=0.20, w₄=0.10
+where weights: w₁=0.35, w₂=0.35, w₃=0.20, w₄=0.10
 ```
 
-## ПРИОРИТЕТ 3: Продвинутые параметры
+## PRIORITY 3: Advanced Parameters
 
-### 10. Нелинейные HRV метрики
+### 10. Nonlinear HRV Metrics
 
 #### 10.1 Sample Entropy (SampEn)
-**Формула:**
+
+**Formula:**
+
 ```
 SampEn(m,r,N) = -ln[Cₘ₊₁(r)/Cₘ(r)]
 ```
-- **Параметры:** m=2, r=0.2×SDNN
-- **Интерпретация:** ↓ SampEn = ↓ сложность = ↑ усталость
+
+* **Parameters:** m=2, r=0.2×SDNN
+* **Interpretation:** ↓ SampEn = ↓ complexity = ↑ fatigue
 
 #### 10.2 DFA α1 (Detrended Fluctuation Analysis)
-**Формула:**
+
+**Formula:**
+
 ```
 F(n) ∝ n^α
-α1 для n = 4-16 beats
+α1 for n = 4–16 beats
 ```
-- **Норма:** α1 ≈ 1.0
-- **Интерпретация:** α1 < 0.75 указывает на усталость
 
-### 11. Температурные показатели
+* **Norm:** α1 ≈ 1.0
+* **Interpretation:** α1 < 0.75 indicates fatigue
+
+### 11. Temperature Metrics
 
 #### 11.1 Skin Temperature Variability
-**Формула:**
+
+**Formula:**
+
 ```
 Temp_deviation = |Temp_current - Temp_baseline_circadian|
 ```
-- **Единицы:** °C
-- **Порог:** отклонение > 0.5°C может указывать на стресс
 
-### 12. Производные метрики
+* **Units:** °C
+* **Threshold:** > 0.5°C deviation may indicate stress
 
-#### 12.1 HRV Slope (тренд)
-**Формула:**
+### 12. Derived Metrics
+
+#### 12.1 HRV Slope (trend)
+
+**Formula:**
+
 ```
-HRV_slope = β из линейной регрессии: RMSSD = α + β×день
+HRV_slope = β from linear regression: RMSSD = α + β×day
 ```
-- **Окно:** 7-14 дней
-- **Интерпретация:** Отрицательный наклон = накопление усталости
 
-## ДОПОЛНИТЕЛЬНЫЕ ВОЗМОЖНОСТИ (с продвинутыми датчиками)
+* **Window:** 7–14 days
+* **Interpretation:** Negative slope = accumulating fatigue
 
-### A. SpO2 (Сатурация кислорода)
-**Требования:** Красный + инфракрасный LED
+## ADDITIONAL FEATURES (with advanced sensors)
+
+### A. SpO₂ (Oxygen Saturation)
+
+**Requirements:** Red + infrared LED
+
 ```
-SpO2 = (AC_red/DC_red) / (AC_ir/DC_ir) × калибровочный_коэффициент
+SpO2 = (AC_red/DC_red) / (AC_ir/DC_ir) × calibration_coefficient
 ```
-- **Норма:** 95-100%
-- **Применение:** Детекция апноэ, высотная адаптация
 
-### B. Электродермальная активность (EDA)
-**Требования:** Датчики проводимости кожи
+* **Normal:** 95–100%
+* **Use:** Apnea detection, altitude adaptation
+
+### B. Electrodermal Activity (EDA)
+
+**Requirements:** Skin conductance sensors
+
 ```
 SCR_amplitude = max(EDA) - baseline_EDA
-SCR_frequency = количество_пиков / время
+SCR_frequency = peak_count / time
 ```
-- **Применение:** Эмоциональный стресс, ментальная нагрузка
+
+* **Use:** Emotional stress, mental load
 
 ### C. Core Body Temperature
-**Требования:** Специальные температурные датчики
+
+**Requirements:** Specialized temperature sensors
+
 ```
 Circadian_amplitude = (Temp_max - Temp_min) / 2
 Phase_shift = Acrophase_current - Acrophase_normal
 ```
 
-## КАЛИБРОВКА И ПЕРСОНАЛИЗАЦИЯ
+## CALIBRATION AND PERSONALIZATION
 
-### Установление базовых линий
-**Минимальный период:** 14 дней
-**Формула адаптации:**
+### Establishing Baselines
+
+**Minimum period:** 14 days
+**Adaptation formula:**
+
 ```
 Baseline_personal = α × Baseline_population + (1-α) × Individual_mean
-где α = 1/(1 + days_of_data/7)
+where α = 1/(1 + days_of_data/7)
 ```
 
-### Z-score нормализация
-**Для всех метрик:**
+### Z-score Normalization
+
+**For all metrics:**
+
 ```
 Z_score = (Value_current - Mean_personal) / SD_personal
 ```
-- **Интерпретация:** |Z| > 2 = значимое отклонение
 
-### Весовые коэффициенты для комбинированной оценки
+* **Interpretation:** |Z| > 2 = significant deviation
+
+### Weighted Coefficients for Composite Scoring
+
 ```
 Fatigue_Score = Σwᵢ × normalize(parameterᵢ)
 
-Рекомендуемые веса:
+Recommended weights:
 - HRV (RMSSD): 0.30
 - Sleep Quality: 0.25
 - Activity Load: 0.20
@@ -285,18 +363,21 @@ Fatigue_Score = Σwᵢ × normalize(parameterᵢ)
 - Other parameters: 0.10
 ```
 
-## ТЕХНИЧЕСКИЕ ТРЕБОВАНИЯ
+## TECHNICAL REQUIREMENTS
 
-### Частота дискретизации
-- **PPG сигнал:** минимум 25 Hz, оптимально 100-250 Hz
-- **Акселерометр:** 50-100 Hz
-- **Температура:** 1 Hz
+### Sampling Frequency
 
-### Точность измерений
-- **R-R интервалы:** ±5 мс
-- **HR:** ±2 уд/мин
-- **Движение:** 12-bit разрешение минимум
+* **PPG signal:** Minimum 25 Hz, optimal 100–250 Hz
+* **Accelerometer:** 50–100 Hz
+* **Temperature:** 1 Hz
 
-### Энергопотребление
-- **Непрерывный HRV мониторинг:** ~10-15 мА
-- **Периодические измерения:** ~2-5 мА средний ток
+### Measurement Accuracy
+
+* **R-R intervals:** ±5 ms
+* **HR:** ±2 bpm
+* **Motion:** Minimum 12-bit resolution
+
+### Power Consumption
+
+* **Continuous HRV monitoring:** \~10–15 mA
+* **Periodic measurements:** \~2–5 mA average current
