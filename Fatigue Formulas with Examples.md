@@ -1,5 +1,5 @@
 
-# 📊 Key Fatigue Assessment Formulas
+# Key Fatigue Assessment Formulas
 
 This markdown file summarizes the **core formulas** used for fatigue tracking, including:
 - Equation
